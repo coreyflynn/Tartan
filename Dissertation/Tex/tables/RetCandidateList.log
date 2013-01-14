@@ -1,0 +1,390 @@
+This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2010.7.21)  25 MAR 2011 16:18
+entering extended mode
+ \write18 enabled.
+ %&-line parsing enabled.
+**RetCandidateList.tex
+(./RetCandidateList.tex
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman-x-2009-06-19, ngerman-x-2009-06-19, ancientgreek, ibycus, arabic, armenian
+, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danish, dutch, u
+kenglish, usenglishmax, esperanto, estonian, farsi, finnish, french, galician, 
+german, ngerman, swissgerman, monogreek, greek, hungarian, icelandic, assamese,
+ bengali, gujarati, hindi, kannada, malayalam, marathi, oriya, panjabi, tamil, 
+telugu, indonesian, interlingua, irish, italian, kurmanji, lao, latin, latvian,
+ lithuanian, mongolian, mongolianlmc, bokmal, nynorsk, polish, portuguese, roma
+nian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, turkish,
+ turkmen, ukrainian, uppersorbian, welsh, loaded.
+(/usr/local/texlive/2010/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2010/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@chapter=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/local/texlive/2010/texmf-dist/tex/latex/ltxmisc/topcapt.sty
+Package: topcapt 2004/12/11 v1.2 Caption at top of float
+)
+(/usr/local/texlive/2010/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2005/04/14 v1.61803 publication quality tables
+\heavyrulewidth=\dimen103
+\lightrulewidth=\dimen104
+\cmidrulewidth=\dimen105
+\belowrulesep=\dimen106
+\belowbottomsep=\dimen107
+\aboverulesep=\dimen108
+\abovetopsep=\dimen109
+\cmidrulesep=\dimen110
+\cmidrulekern=\dimen111
+\defaultaddspace=\dimen112
+\@cmidla=\count88
+\@cmidlb=\count89
+\@aboverulesep=\dimen113
+\@belowrulesep=\dimen114
+\@thisruleclass=\count90
+\@lastruleclass=\count91
+\@thisrulewidth=\dimen115
+)
+(/usr/local/texlive/2010/texmf-dist/tex/latex/tools/array.sty
+Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
+\col@sep=\dimen116
+\extrarowheight=\dimen117
+\NC@list=\toks14
+\extratabsurround=\skip43
+\backup@length=\skip44
+)
+(/usr/local/texlive/2010/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2004/02/01 v4.11 Multi-page Table package (DPC)
+\LTleft=\skip45
+\LTright=\skip46
+\LTpre=\skip47
+\LTpost=\skip48
+\LTchunksize=\count92
+\LTcapwidth=\dimen118
+\LT@head=\box26
+\LT@firsthead=\box27
+\LT@foot=\box28
+\LT@lastfoot=\box29
+\LT@cols=\count93
+\LT@rows=\count94
+\c@LT@tables=\count95
+\c@LT@chunks=\count96
+\LT@p@ftn=\toks15
+)
+(/usr/local/texlive/2010/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
+
+(/usr/local/texlive/2010/texmf-dist/tex/latex/latexconfig/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+
+(/usr/local/texlive/2010/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2010/02/14 v0.04n Graphics/color for pdfTeX
+\Gread@gobject=\count97
+)
+(/usr/local/texlive/2010/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2001/02/13 v0.1j Color table columns (DPC)
+\everycr=\toks16
+\minrowclearance=\skip49
+)
+\rownum=\count98
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
+Package xcolor Info: Model `RGB' extended on input line 1353.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1355.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1356.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1357.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
+)
+(./RetCandidateList.aux)
+\openout1 = `RetCandidateList.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+
+(/usr/local/texlive/2010/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count99
+\scratchdimen=\dimen119
+\scratchbox=\box30
+\nofMPsegments=\count100
+\nofMParguments=\count101
+\everyMPshowfont=\toks17
+\MPscratchCnt=\count102
+\MPscratchDim=\dimen120
+\MPnumerator=\count103
+\everyMPtoPDFconversion=\toks18
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 15.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 15.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 15.
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--15
+[]|\OT1/cmr/bx/n/8 Protein
+ []
+
+
+Overfull \hbox (3.69681pt too wide) in paragraph at lines 15--15
+[]|\OT1/cmr/bx/n/8 Expression
+ []
+
+
+Overfull \hbox (7.97104pt too wide) in paragraph at lines 15--15
+[]|\OT1/cmr/bx/n/8 Total
+ []
+
+
+Overfull \hbox (3.81154pt too wide) in paragraph at lines 15--15
+\OT1/cmr/bx/n/8 Hits| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--15
+\OT1/cmr/bx/n/8 (T-N)
+ []
+
+
+Overfull \hbox (6.14752pt too wide) in paragraph at lines 15--15
+\OT1/cmr/bx/n/8 /(T+N)| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--15
+[]|\OT1/cmr/bx/n/8 Matched
+ []
+
+
+Overfull \hbox (6.16725pt too wide) in paragraph at lines 15--15
+[]|\OT1/cmr/bx/n/8 Score| 
+ []
+
+
+Overfull \hbox (10.84479pt too wide) in paragraph at lines 15--16
+[]|\OT1/cmr/bx/n/8 Coverage| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 20--21
+[]|\OT1/cmr/m/n/8 Continued on
+ []
+
+
+Overfull \hbox (0.88496pt too wide) in paragraph at lines 25--25
+[]|\OT1/cmr/m/n/8 4.51| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 26--26
+[]|\OT1/cmr/m/n/8 Macaca Mu-
+ []
+
+
+Overfull \hbox (0.88496pt too wide) in paragraph at lines 26--26
+[]|\OT1/cmr/m/n/8 4.94| 
+ []
+
+
+Underfull \hbox (badness 1242) in paragraph at lines 27--27
+[]|\OT1/cmr/m/n/8 beta A1 crys-
+ []
+
+
+Overfull \hbox (0.88496pt too wide) in paragraph at lines 27--27
+[]|\OT1/cmr/m/n/8 6.38| 
+ []
+
+
+Underfull \hbox (badness 1454) in paragraph at lines 28--28
+[]|\OT1/cmr/m/n/8 beta B1 crys-
+ []
+
+
+Overfull \hbox (0.88496pt too wide) in paragraph at lines 28--28
+[]|\OT1/cmr/m/n/8 7.66| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 29--29
+[]|\OT1/cmr/m/n/8 dnaK-type
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 29--29
+\OT1/cmr/m/n/8 molec-u-lar
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 29--29
+\OT1/cmr/m/n/8 chap-er-one
+ []
+
+
+Overfull \hbox (0.88496pt too wide) in paragraph at lines 29--29
+[]|\OT1/cmr/m/n/8 5.43| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
+[]|\OT1/cmr/m/n/8 guanine
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
+\OT1/cmr/m/n/8 nucleotide-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
+\OT1/cmr/m/n/8 binding pro-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
+\OT1/cmr/m/n/8 tein, beta-1
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
+[]|\OT1/cmr/m/n/8 Canis fa-mil-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 31--31
+[]|\OT1/cmr/m/n/8 heat shock
+ []
+
+
+Underfull \hbox (badness 2073) in paragraph at lines 31--31
+\OT1/cmr/m/n/8 70kDa pro-tein
+ []
+
+
+Overfull \hbox (0.88496pt too wide) in paragraph at lines 31--31
+[]|\OT1/cmr/m/n/8 5.62| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 32--32
+[]|\OT1/cmr/m/n/8 Heterogeneous
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 32--32
+\OT1/cmr/m/n/8 cle-o-pro-tein F
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 32--32
+[]|\OT1/cmr/m/n/8 Canis fa-mil-
+ []
+
+
+Overfull \hbox (0.88496pt too wide) in paragraph at lines 32--32
+[]|\OT1/cmr/m/n/8 5.32| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--33
+[]|\OT1/cmr/m/n/8 Hexokinase,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--33
+[]|\OT1/cmr/m/n/8 Canis fa-mil-
+ []
+
+
+Overfull \hbox (2.73808pt too wide) in paragraph at lines 33--33
+[]|\OT1/cmr/m/n/8 120076| 
+ []
+
+
+Overfull \hbox (0.88496pt too wide) in paragraph at lines 33--33
+[]|\OT1/cmr/m/n/8 8.88| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 34--34
+[]|\OT1/cmr/m/n/8 Macaca Mu-
+ []
+
+
+Overfull \hbox (2.73808pt too wide) in paragraph at lines 34--34
+[]|\OT1/cmr/m/n/8 254083| 
+ []
+
+
+Overfull \hbox (0.88496pt too wide) in paragraph at lines 34--34
+[]|\OT1/cmr/m/n/8 5.76| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 35--35
+[]|\OT1/cmr/m/n/8 protein phos-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 35--35
+\OT1/cmr/m/n/8 phatase 1,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 35--35
+\OT1/cmr/m/n/8 cat-alytic sub-
+ []
+
+
+Overfull \hbox (0.88496pt too wide) in paragraph at lines 35--35
+[]|\OT1/cmr/m/n/8 5.84| 
+ []
+
+[1
+
+{/usr/local/texlive/2010/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+(./RetCandidateList.aux) ) 
+Here is how much of TeX's memory you used:
+ 1426 strings out of 493747
+ 17283 string characters out of 3143546
+ 104050 words of memory out of 3000000
+ 4762 multiletter control sequences out of 15000+200000
+ 6070 words of font info for 22 fonts, out of 3000000 for 9000
+ 714 hyphenation exceptions out of 8191
+ 41i,7n,35p,245b,250s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2010/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr12.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmr8.pfb>
+Output written on RetCandidateList.pdf (1 page, 41107 bytes).
+PDF statistics:
+ 20 PDF objects out of 1000 (max. 8388607)
+ 13 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

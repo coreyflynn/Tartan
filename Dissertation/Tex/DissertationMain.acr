@@ -1,0 +1,31 @@
+\glossarysection[\glossarytoctitle]{\glossarytitle}\glossarypreamble
+\begin{theglossary}\glossaryheader
+\glsgroupheading{glsnumbers}\relax\glsresetentrylist
+\glossaryentryfield{2D-DIGE}{\glsnamefont{2D-DIGE}}{two dimensional difference gel electrophoresis}{\relax }{\glossaryentrynumbers{\relax 
+\setentrycounter{page}\glsnumberformat{39}\delimN 
+\setentrycounter{page}\glsnumberformat{43}\delimN 
+\setentrycounter{page}\glsnumberformat{46}}}\glsgroupskip
+\glsgroupheading{L}\relax\glsresetentrylist
+\glossaryentryfield{LGN}{\glsnamefont{LGN}}{lateral geniculate nucleus}{\relax }{\glossaryentrynumbers{\relax 
+\setentrycounter{page}\glsnumberformat{4}\delimN 
+\setentrycounter{page}\glsnumberformat{8}\delimN 
+\setentrycounter{page}\glsnumberformat{13}\delimN 
+\setentrycounter{page}\glsnumberformat{16}\delimN 
+\setentrycounter{page}\glsnumberformat{19}\delimN 
+\setentrycounter{page}\glsnumberformat{22}\delimN 
+\setentrycounter{page}\glsnumberformat{24}\delimN 
+\setentrycounter{page}\glsnumberformat{27}\delimN 
+\setentrycounter{page}\glsnumberformat{29}\delimN 
+\setentrycounter{page}\glsnumberformat{35}\delimN 
+\setentrycounter{page}\glsnumberformat{39}\delimN 
+\setentrycounter{page}\glsnumberformat{41}\delimN 
+\setentrycounter{page}\glsnumberformat{43}}}\glsgroupskip
+\glsgroupheading{R}\relax\glsresetentrylist
+\glossaryentryfield{RGC}{\glsnamefont{RGC}}{retinal ganglion cell}{\relax }{\glossaryentrynumbers{\relax 
+\setentrycounter{page}\glsnumberformat{4}\delimN 
+\setentrycounter{page}\glsnumberformat{8}\delimN 
+\setentrycounter{page}\glsnumberformat{13}\delimN 
+\setentrycounter{page}\glsnumberformat{16}\delimN 
+\setentrycounter{page}\glsnumberformat{22}\delimN 
+\setentrycounter{page}\glsnumberformat{27}}}%
+\end{theglossary}\glossarypostamble

@@ -1,0 +1,38 @@
+\documentclass[12pt]{report}
+\usepackage{topcapt}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage[table]{xcolor}
+\begin{document}
+
+\definecolor{lightgray}{rgb}{0.8,0.8,0.8}
+\rowcolors{2}{lightgray}{white}
+\begin{center}\scriptsize
+\begin{longtable}{m{2cM} m{1.5cM} m{.5cM} m{1cM} m{2cM} m{.8cM} m{0.5cM} m{0.6cM} m{1cM}}
+\caption[List of protein candidates found to be differentially expressed across temporal and nasal retina.]{List of protein candidates found to be differentially expressed across temporal and nasal retina.} \\
+\hline
+{\bf Protein Name} & {\bf Expression Direction} & {\bf Total Hits} & {\bf EI \newline(T-N) /(T+N)} & {\bf Matched Species} & {\bf MW\newline(Da)} & {\bf pH} & {\bf Score} & {\bf Coverage} \\ 
+\hline
+\endfirsthead
+\endhead
+\hline
+{{Continued on next page}} \\ 
+\hline
+\endfoot
+\hline \hline
+\endlastfoot
+14-3-3 epsilon & Temporal & 1 & 1 & Mus musculus   & 20115 & 4.51 &	100	& 57\\
+    alpha tubulin  & Temporal & 1 & 1 & Macaca Mulatta	 & 43315	& 4.94 & 165	& 55\\
+    beta A1 crystallin	&Nasal	&1	&-1	&Cavia porcellus	&23668	&6.38	&138 &	61\\
+	beta B1 crystallin	&Nasal	&1	&-1	&Bos taurus	&28354	&7.66	&172	 &48\\
+	dnaK-type molecular chaperone hsp72	&Temporal	&1	&1	&Rattus norvegicus	&71112	&5.43	&170 &	34\\
+	guanine nucleotide-binding protein, beta-1 subunit	&Nasal	&1	&-1	&Canis familiaris	&38151	&5.6 &	76	&36\\
+	heat shock 70kDa protein 8	&Nasal	&1	&-1	&Homo sapiens	&53580	&5.62	&230&	44\\
+	Heterogeneous nuclear ribonucleoprotein F (hnRNP F)	&Nasal	&1	&-1	&Canis familiaris	&45942	&5.32	&72	&31\\
+	Hexokinase, type I (HK I)	&Nasal	&1	&-1	&Canis familiaris	&120076	&8.88	&81	&15\\
+	munc13-3	&Temporal	&1	&1	&Macaca Mulatta	&254083	&5.76	&73	&10\\
+	protein phosphatase 1, catalytic subunit	&Nasal	&1	&-1	&Homo sapiens	&37945	&5.84	&79	&33\\
+\end{longtable}
+\end{center}
+\end{document}

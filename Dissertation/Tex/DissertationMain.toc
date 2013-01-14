@@ -1,0 +1,87 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Visual System}{3}{section.1.1}
+\contentsline {subsection}{\numberline {1.1.1}Anatomy}{3}{subsection.1.1.1}
+\contentsline {subsection}{\numberline {1.1.2}Physiology}{6}{subsection.1.1.2}
+\contentsline {subsection}{\numberline {1.1.3}Visual Cortical Columns}{7}{subsection.1.1.3}
+\contentsline {section}{\numberline {1.2}Visual Critical Period}{9}{section.1.2}
+\contentsline {section}{\numberline {1.3}Spontaneous Activity in the Visual System}{11}{section.1.3}
+\contentsline {subsection}{\numberline {1.3.1}Retinal Waves}{11}{subsection.1.3.1}
+\contentsline {subsection}{\numberline {1.3.2}Spontaneous Activity in the LGN}{13}{subsection.1.3.2}
+\contentsline {subsection}{\numberline {1.3.3}Spontaneous Activity in V1}{14}{subsection.1.3.3}
+\contentsline {section}{\numberline {1.4}The Retinogeniculate Circuit}{15}{section.1.4}
+\contentsline {subsection}{\numberline {1.4.1}Structure of the Retinogeniculate Circuit}{15}{subsection.1.4.1}
+\contentsline {subsection}{\numberline {1.4.2}Development of the Retinogeniculate Circuit}{15}{subsection.1.4.2}
+\contentsline {subsection}{\numberline {1.4.3}The Role of Activity in Retinogeniculate Development}{17}{subsection.1.4.3}
+\contentsline {subsection}{\numberline {1.4.4}The Role of Molecular Cues in Retinogeniculate Development}{19}{subsection.1.4.4}
+\contentsline {section}{\numberline {1.5}The Geniculocortical Circuit}{20}{section.1.5}
+\contentsline {subsection}{\numberline {1.5.1}Structure of the Geniculocortical Circuit}{20}{subsection.1.5.1}
+\contentsline {subsection}{\numberline {1.5.2}Development of the Geniculocortical Circuit}{22}{subsection.1.5.2}
+\contentsline {subsection}{\numberline {1.5.3}The Role of Activity in Geniculocortical Development}{24}{subsection.1.5.3}
+\contentsline {subsection}{\numberline {1.5.4}The Role of Molecular Cues in Geniculocortical Development}{25}{subsection.1.5.4}
+\contentsline {section}{\numberline {1.6}Methods for Molecular Characterization of the Visual System}{26}{section.1.6}
+\contentsline {section}{\numberline {1.7}Mylenation in the Lateral Geniculate Nucleus}{27}{section.1.7}
+\contentsline {chapter}{\numberline {2}A novel tissue sampling strategy for the elucidation of molecular correlates of visual development}{29}{chapter.2}
+\contentsline {section}{\numberline {2.1}Introduction}{31}{section.2.1}
+\contentsline {section}{\numberline {2.2}Materials and methods}{34}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}General animal procedures}{34}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Optical imaging of intrinsic signal}{34}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Retina tissue sampling}{35}{subsection.2.2.3}
+\contentsline {subsection}{\numberline {2.2.4}LGN tissue sampling}{36}{subsection.2.2.4}
+\contentsline {subsection}{\numberline {2.2.5}Cortical tissue sampling}{36}{subsection.2.2.5}
+\contentsline {subsection}{\numberline {2.2.6}Two dimensional difference gel electrophoresis}{40}{subsection.2.2.6}
+\contentsline {subsection}{\numberline {2.2.7}Fluorescence gel imaging and image analysis}{42}{subsection.2.2.7}
+\contentsline {subsection}{\numberline {2.2.8}Protein spot isolation and identification}{44}{subsection.2.2.8}
+\contentsline {subsection}{\numberline {2.2.9}Immunohistochemistry}{45}{subsection.2.2.9}
+\contentsline {section}{\numberline {2.3}Results}{46}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Retinal molecular correlates of visual development}{46}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}LGN molecular correlates of visual development}{53}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2.3.3}Cortical molecular correlates of visual development}{60}{subsection.2.3.3}
+\contentsline {section}{\numberline {2.4}Conclusions}{73}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Summary of findings}{73}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}Pitfalls and limitations}{74}{subsection.2.4.2}
+\contentsline {subsection}{\numberline {2.4.3}Discussion}{76}{subsection.2.4.3}
+\contentsline {subsubsection}{Novel tissue sampling paradigm}{76}{section*.23}
+\contentsline {subsubsection}{Collapsin response mediator proteins}{77}{section*.24}
+\contentsline {subsubsection}{Metabolic proteins}{78}{section*.25}
+\contentsline {chapter}{\numberline {3}Developmentally regulated expression of collapsin response mediator protein 4 in the interlaminar zones of the lateral geniculate nucleus}{79}{chapter.3}
+\contentsline {section}{\numberline {3.1}Introduction}{80}{section.3.1}
+\contentsline {section}{\numberline {3.2}Materials and methods}{82}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Ferret and mouse tissue preparation}{82}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Macaque tissue preparation}{83}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Immunohistochemistry}{83}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {3.2.4}Western Blotting}{84}{subsection.3.2.4}
+\contentsline {subsection}{\numberline {3.2.5}Myelin staining}{84}{subsection.3.2.5}
+\contentsline {subsection}{\numberline {3.2.6}Image analysis}{84}{subsection.3.2.6}
+\contentsline {section}{\numberline {3.3}Results}{86}{section.3.3}
+\contentsline {section}{\numberline {3.4}Conclusions}{94}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Summary of findings}{94}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Pitfalls and limitations}{95}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}Discussion}{96}{subsection.3.4.3}
+\contentsline {chapter}{\numberline {4}Expression of collapsin response mediator protein 4 in the presence of altered retinogeniculate input}{100}{chapter.4}
+\contentsline {section}{\numberline {4.1}Introduction}{101}{section.4.1}
+\contentsline {section}{\numberline {4.2}Materials and methods}{103}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Tissue preparation}{103}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Monocular and binocular enucleation}{103}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Intravitreal application of epibatidine}{104}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Immunohistochemistry}{104}{subsection.4.2.4}
+\contentsline {subsection}{\numberline {4.2.5}Myelin staining}{104}{subsection.4.2.5}
+\contentsline {subsection}{\numberline {4.2.6}Image analysis for epibatidine disruption of retinothalamic projections}{104}{subsection.4.2.6}
+\contentsline {subsection}{\numberline {4.2.7}Image analysis for laminar expression of CRMP4 and Myelin}{105}{subsection.4.2.7}
+\contentsline {section}{\numberline {4.3}Results}{105}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Transient epibatidine block of retinal activity disrupts normal retinal projections, normal cytoarchitecture, and normal CRMP4 expression in the LGN}{105}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Monocular or binocular enucleation at birth abolishes normal development of cytoarchitecture in the LGN and normal interlaminar CRMP4 expression}{115}{subsection.4.3.2}
+\contentsline {section}{\numberline {4.4}Conclusions}{118}{section.4.4}
+\contentsline {subsection}{\numberline {4.4.1}Summary of Findings}{118}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.2}Pitfalls and limitations}{118}{subsection.4.4.2}
+\contentsline {subsection}{\numberline {4.4.3}Discussion}{119}{subsection.4.4.3}
+\contentsline {chapter}{\numberline {5}General Discussion}{122}{chapter.5}
+\contentsline {section}{\numberline {5.1}Toward a molecular characterization of ocular dominance}{122}{section.5.1}
+\contentsline {section}{\numberline {5.2}Molecular development of the LGN}{127}{section.5.2}
+\contentsline {section}{\numberline {5.3}Hypothesized roles of CRMP4 during LGN development}{129}{section.5.3}
+\contentsline {subsection}{\numberline {5.3.1}Hypothesis i: CRMP4 serves as a response factor downstream of myelin signaling and mediates myelin dependent outgrowth inhibition in the cell sparse interlaminar zones.}{130}{subsection.5.3.1}
+\contentsline {subsection}{\numberline {5.3.2}Hypothesis ii: CRMP4 serves as a response factor downstream of semaphorin signaling and mediates growth cone collapse in the cell sparse interlaminar zones.}{137}{subsection.5.3.2}
+\contentsline {subsection}{\numberline {5.3.3}Hypothesis iii: CRMP4 serves to modulate calcium signaling in RGC axon terminals in the cell sparse interlaminar zones}{140}{subsection.5.3.3}
+\contentsline {section}{\numberline {5.4}Conclusions}{142}{section.5.4}
+\contentsline {subsection}{\numberline {5.4.1}Specific conclusions}{142}{subsection.5.4.1}
+\contentsline {subsection}{\numberline {5.4.2}General conclusions}{143}{subsection.5.4.2}
+\contentsline {chapter}{References}{145}{chapter*.41}
