@@ -1,0 +1,3 @@
+function BistackToVol(bistack)
+[X,Y]=find(bistack==1);
+

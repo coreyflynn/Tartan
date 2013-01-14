@@ -1,0 +1,109 @@
+function maps=OR_map_analysis
+%This function asks the user for two input images that represent the 0-90 and
+%45-135 difference images from an orientaiton mapping experiment in the visual
+%cortex.  From these images, it calculates the magnitude of orientation response
+%at all pixels in the images as well as the angular preference of all pixels in 
+%the image.  Once the anglemap is computed, putative sites for pinwheels are
+%calculated from the angular preference map.  These sites are reported separately
+%for pinwheels of clockwise and counterclockwise chirality.
+%
+%USAGE
+%maps=OR_map_analysis
+%
+%VARIABLE DEFINITIONS
+%maps - a structure containing the following maps to be output:
+%		magmap - the response magnitude map
+%		anglemap - the angular preference map
+%		pospin - pinwheel location image for pinwheels with a clockwise chirality
+%		negpin - pinwheel location image for pinwheels with a counter-clockwise chirality
+
+%import two difference images.  One for the 0-90 difference and one for the
+%45-135 difference.
+[file,path]=uigetfile({'*.bmp';'*.jpg';'*.tif'},'Select 0-90 Difference Image'...
+    ,'~/Desktop');
+diff0=double(imread(sprintf('%s%s',path,file)));
+if size(diff0,3)==3
+	diff0=mean(diff0,3);
+end
+[file,path]=uigetfile({'*.bmp';'*.jpg';'*.tif'},'Select 45-135 Difference Image'...
+    ,path);
+diff45=double(imread(sprintf('%s%s',path,file)));
+if size(diff45,3)==3
+	diff45=mean(diff45,3);
+end
+
+%apply a fermi filter to the image to generate an image of the local
+%background.  Subtract the background to flatten the image and
+%to center the grey values in the image near zero.
+bg0=fermifilt(diff0,1300,6.4);
+bg45=fermifilt(diff45,1300,6.4);
+diff0f=diff0-bg0;
+diff45f=diff45-bg45;
+
+%calculate the angular preference map as a complex field from the two
+%flattened images.  This will map the responses onto a 360 polar
+%representation.  From this complex field, calculate the angular repsponse
+%and the magnitude of response in a 180 degree orientation space.
+z=diff0f+i*diff45f;
+anglemap=angle(z)/pi*180/2+90;
+magmap=abs(z);
+cmap=open('circlemap.mat');
+figure;imagesc(magmap);colormap(gray);
+title('Reponse Magnitude Map');colorbar;drawnow;
+figure;imagesc(anglemap);colormap(cmap.circlemap);
+title('Angular Reponse Map');colorbar;
+
+
+%calculate a smoothed map using a wider low pass fermi filter on the original
+%images.  From these images, the background image is again used to subtract the 
+%the local backgound and the images are used to create a polar map as above.
+diff0s=fermifilt(diff0,300,6.4);
+diff45s=fermifilt(diff45,300,6.4);
+diff0sf=diff0s-bg0;
+diff45sf=diff45s-bg45;
+zs=diff0sf+i*diff45sf;
+anglemap_s=angle(zs)/pi*180/2+90;
+
+%find pinwheels in a smoothed version of the map
+[pospin, negpin]=pinwheel_loc(anglemap_s,2);
+
+%store the anglemap, magnitude map, polar map, and two images with 
+%different chiralities of pinwheels into an output structure to be returned
+%as the funciton output. 
+maps.magmap=magmap;
+maps.anglemap=anglemap;
+maps.pospin=pospin;
+maps.negpin=negpin;
+%create a a red and green overlay of the pinwheelmaps
+RGpin=zeros(size(pospin,1),size(pospin,2),3);
+RGpin(:,:,1)=pospin;
+RGpin(:,:,2)=negpin;
+maps.RGpin=RGpin;
+%compute the polar map
+load circlemap.mat;
+rgbang=ind2rgb(uint8(anglemap/max(anglemap(:))*64),circlemap);
+polarmap=zeros(size(anglemap,1),size(anglemap,2),3);
+for N=1:3
+polarmap(:,:,N)=rgbang(:,:,N).*magmap/max(magmap(:));
+end
+figure;imagesc(polarmap);
+maps.polarmap=polarmap;
+
+
+%write the maps to individual images in the same file directory as the
+%original difference images.
+imwrite(maps.magmap/max(maps.magmap(:)),sprintf('%smagmap.jpg',path));
+imwrite(maps.pospin/max(maps.pospin(:)),sprintf('%spospin.jpg',path));
+imwrite(maps.negpin/max(maps.negpin(:)),sprintf('%snegpin.jpg',path));
+imwrite(maps.anglemap/max(maps.anglemap(:))*64,circlemap...
+    ,sprintf('%sanglemap.jpg',path));
+imwrite(maps.polarmap,sprintf('%spolarmap.jpg',path));
+imwrite(maps.RGpin,sprintf('%sRpospin_Gnegpin.jpg',path));
+
+%Version: 1.0
+%Corey J. Flynn
+%Laboratory of Justin Crowley
+%Department of Biological Sciences
+%Carnegie Mellon University
+%Contact: cjflynn@andrew.cmu.edu
+

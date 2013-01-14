@@ -1,0 +1,55 @@
+function celldata=AAG_calcium_analysis
+%%import images to be analyzed
+[files,path]=uigetfile({'*.dvi'},'Select a set of lsm files'...
+   ,'~/Desktop','MultiSelect','on');
+G=get_OGB_frames(path,files,1);
+
+%%display a summed time series image to allow the user to select all cells
+%%to be analyzed in the data set
+Gsum=sum(G,3);imagesc(Gsum);
+mask=zeros(88,88);
+stop_flag=0;
+while stop_flag==0
+    subplot(1,2,1);imagesc(mask);subplot(1,2,2);imagesc(Gsum);
+    tmpmask=roipoly;
+    mask=mask+tmpmask;
+    button=questdlg('label more cells?');
+    if strcmp(button,'No')==1
+        stop_flag=1;
+    end
+end
+
+%%Generate a unique cell identifier for all labeled cells and report the
+%%number of cells
+L=bwlabel(mask,4);
+numcells=max(L(:));
+
+%%For each block extract the summed pixel value for each cell through time
+%%and compile an average across all user selected blocks
+celldata=zeros(numcells,700);
+blockdata=get_block_data(celldata,L,G);
+celldata=blockdata;
+for N=2:length(files)
+    G=get_OGB_frames(path,files,N);
+    blockdata=get_block_data(celldata,L,G);
+    celldata=celldata+blockdata;
+end
+celldata=celldata/length(files);
+
+
+function G=get_OGB_frames(path,files,fnum)
+    tmpstack=tiffread2('%s/%s',path,files{fnum});
+    G=zeros(88,88,700);
+    iter=0;
+    disp('extracting OGB data');
+    for N=1:2:1400
+        iter=iter+1;
+        G(:,:,iter)=tmpstack(N).green;
+    end
+end
+
+function get_block_data
+end
+
+function get_cell_data
+end

@@ -1,0 +1,12 @@
+function binned=cjf_1D_mean_bin(input,binsize)
+binned=zeros(1,binsize);
+old=1;
+counter=0;
+for N=length(input)/binsize*2:length(input)/binsize:length(input)
+    new=round(N);
+    counter=counter+1;
+    binned(counter)=mean(input(old:new));
+    old=new;
+end
+subplot(1,2,1);plot(input);
+subplot(1,2,2);plot(binned);

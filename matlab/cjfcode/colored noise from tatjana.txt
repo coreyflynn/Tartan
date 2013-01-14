@@ -1,0 +1,26 @@
+a=-N/20:1/10:N/20;
+%Correlation function
+CorSample=sigmav^2./(cosh(sigmavp/sigmav*a));
+
+FFTCor=fft(CorSample);
+
+RandomNumbers(1:Nneu,1:2,1:N+1)=0;
+
+        RandomNumbers(k,1,:)=randn(1,N+1);
+        RandomNumbers(k,2,:)=randn(1,N+1);
+        vector(1,:)=RandomNumbers(k,1,:);
+        vector(2,:)=RandomNumbers(k,2,:);
+        Coef=sqrt(abs(FFTCor)).*[vector(1,:)+i*vector(2,:)].*sqrt(N+1);
+        %If necessary, one can view or reuse the random numbers
+        X=ifft(Coef);
+        Xt(k,:)=real(X)+V0-sum(real(X))/(N+1);
+
+-- 
+Tatjana Tchumatchenko
+Phone: +49 (0)551 5176550
+Fax: +49 (0)551 5176439
+EMail: tatjana@nld.ds.mpg.de
+Institute for Nonlinear Dynamics
+Bunsenstrasse 10, D-37073 Goettingen, Germany
+
+

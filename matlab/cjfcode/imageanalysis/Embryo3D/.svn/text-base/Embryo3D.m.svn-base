@@ -1,0 +1,1115 @@
+function varargout = Embryo3D(varargin)
+% EMBRYO3D M-file for Embryo3D.fig
+%      EMBRYO3D, by itself, creates a new EMBRYO3D or raises the existing
+%      singleton*.
+%
+%      H = EMBRYO3D returns the handle to a new EMBRYO3D or the handle to
+%      the existing singleton*.
+%
+%      EMBRYO3D('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in EMBRYO3D.M with the given input arguments.
+%
+%      EMBRYO3D('Property','Value',...) creates a new EMBRYO3D or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before Embryo3D_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to Embryo3D_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help Embryo3D
+
+% Last Modified by GUIDE v2.5 19-Mar-2010 10:57:08
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @Embryo3D_OpeningFcn, ...
+                   'gui_OutputFcn',  @Embryo3D_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before Embryo3D is made visible.
+function Embryo3D_OpeningFcn(hObject, eventdata, handles, varargin)
+%set the initial state of axes and GUI objects
+axes(handles.axes1);axis off;
+axes(handles.axes2);axis off;
+axes(handles.axes3);axis off;
+set(handles.pathEdit,'String','~/Desktop');
+set(handles.FISHThreshButton,'Enable','off');
+set(handles.OpenNucButton,'Enable','off');
+set(handles.OpenFISHButton,'Enable','off');
+set(handles.DilateFISHButton,'Enable','off');
+set(handles.FindNucButton,'Enable','off');
+set(handles.FindPosNucButton,'Enable','off');
+set(handles.menu_CheckCenters,'Enable','off');
+set(handles.menu_Mline,'Enable','off');
+set(handles.toolbar3Dplot,'Enable','off');
+set(handles.toolbarMline,'Enable','off');
+
+%set up processing flags for later use
+handles.flags=[0 0 0 0 0 0 0 0 0];
+
+
+% Choose default command line output for Embryo3D
+handles.output = hObject;
+
+
+% Update handles structure
+guidata(hObject, handles);
+
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = Embryo3D_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+
+% --- Executes on slider movement.
+function ImageSlider_Callback(hObject, eventdata, handles)
+Val=round(get(handles.ImageSlider,'Value'));
+axes(handles.axes1);
+handles.hImg1=imagesc(handles.currentstack1(:,:,Val));colormap(gray);axis off;
+axes(handles.axes2);
+handles.hImg2=imagesc(handles.currentstack2(:,:,Val));colormap(gray);axis off;
+switch get(handles.popupmenu3,'Value')
+    case 1
+        axes(handles.axes3);
+        handles.hImg3=imagesc(handles.overlap(:,:,Val));colormap(gray);axis off;
+    case 2
+        tmp=double(handles.currentstack1(:,:,Val));        
+        handles.overlap(:,:,3)=tmp/max(max(tmp));
+        tmp=double(handles.currentstack2(:,:,Val));
+        handles.overlap(:,:,2)=tmp/max(max(tmp));
+        axes(handles.axes3);
+        handles.hImg3=imagesc(handles.overlap);colormap(gray);axis off;
+end
+handles.XData=get(handles.hImg1,'XData');
+handles.YData=get(handles.hImg1,'YData');
+guidata(hObject, handles);
+
+
+
+% --- Executes during object creation, after setting all properties.
+function ImageSlider_CreateFcn(hObject, eventdata, handles)
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on button press in NucThreshButton.
+function NucThreshButton_Callback(hObject, eventdata, handles)
+set(handles.statusEdit,'String','Thresholding Nucleus Stack');drawnow;
+handles.thresh=str2num(get(handles.NucThreshEdit,'String'));
+handles.threshstack=handles.nucstack*0;
+for N=1:size(handles.nucstack,3)
+    handles.threshstack(:,:,N)=medfilt2(handles.nucstack(:,:,N));
+end
+handles.threshstack=handles.threshstack>handles.thresh;
+
+%handles.threshstack=handles.nucstack>handles.thresh;
+handles.currentstack1=handles.threshstack;
+set(handles.FISHThreshButton,'Enable','on');
+if handles.flags(3)==0
+    add_to_listbox(handles,'Thresholded Nucleus Data');
+    handles.flags(3)=1;
+end
+set(handles.popupmenu1,'Value',3);
+guidata(hObject, handles);
+update_images(hObject,handles);
+set(handles.statusEdit,'String','');drawnow;
+
+
+
+function NucThreshEdit_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes during object creation, after setting all properties.
+function NucThreshEdit_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in dilateButton.
+function dilateButton_Callback(hObject, eventdata, handles)
+openVal=str2double(get(handles.NucOpenEdit,'String'));
+set(handles.statusEdit,'String','Opening FISH Stack');drawnow;
+handles.dilatestack=double(handles.openstack*0);
+s=strel('disk',openVal);
+for N=size(handles.openstack,3)
+    handles.dilatestack(:,:,N)=imerode(handles.FISHstack(:,:,N)>...
+        handles.thresh,s);
+end
+
+for N=size(handles.openstack,3)
+    handles.dilatestack(:,:,N)=imdilate(handles.dilatestack(:,:,N),s);
+end
+
+set(handles.statusEdit,'String','Dilating FISH Stack');drawnow;
+for N=size(handles.openstack,3)
+    handles.dilatestack(:,:,N)=imdilate(handles.dilatestack(:,:,N),s);
+end
+
+handles.overlapstack=handles.threshstack.*handles.dilatestack;
+
+Val=round(get(handles.ImageSlider,'Value'));
+axes(handles.axes1);imagesc(handles.threshstack(:,:,Val));colormap(gray);axis off;
+axes(handles.axes2);imagesc(handles.dilatestack(:,:,Val));colormap(gray);axis off;
+axes(handles.axes3);imagesc(handles.overlapstack(:,:,Val));colormap(gray);axis off;
+guidata(hObject, handles);
+handles.numim=size(handles.nucstack,3);
+set(handles.ImageSlider,'Max',handles.numim,'Min',1,'SliderStep',[1/handles.numim 5/handles.numim],'Value',Val);
+guidata(hObject, handles);
+
+set(handles.statusEdit,'String','');
+
+handles.processflag=2;
+guidata(hObject, handles);
+
+
+
+
+function NucOpenEdit_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function NucOpenEdit_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in overlapButton.
+function overlapButton_Callback(hObject, eventdata, handles)
+
+
+function overlapEdit_Callback(hObject, eventdata, handles)
+
+% --- Executes during object creation, after setting all properties.
+function overlapEdit_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function pathEdit_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes during object creation, after setting all properties.
+function pathEdit_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in imageExport.
+function imageExport_Callback(hObject, eventdata, handles)
+
+
+
+% --------------------------------------------------------------------
+function File_Callback(hObject, eventdata, handles)
+
+
+
+% --------------------------------------------------------------------
+function menu_TiffOpen_Callback(hObject, eventdata, handles)
+path=get(handles.pathEdit,'String');
+set(handles.statusEdit,'String','Reading Nucleus Image Data');drawnow;
+[nucfile,nucpath]=uigetfile({'*.tif;*.tiff'},'select nucleus stack',path);
+nucstack=tiffread2(sprintf('%s/%s',nucpath,nucfile));
+
+set(handles.statusEdit,'String','Reading FISH Image Data');drawnow;
+[FISHfile,FISHpath]=uigetfile({'*.tif;*.tiff'},'select FISH stack',nucpath);
+FISHstack=tiffread2(sprintf('%s/%s',FISHpath,FISHfile));
+
+set(handles.statusEdit,'String','Converting Nucleus Data to Stack');drawnow;
+handles.nucstack=zeros(nucstack(1).height,nucstack(1).width,length(nucstack));
+for N=1:length(nucstack)
+    handles.nucstack(:,:,N)=double(nucstack(N).data);
+    handles.nucstack(:,:,N)=handles.nucstack(:,:,N)/max(max(handles.nucstack(:,:,N)));
+end
+handles.currentstack1=handles.nucstack;
+
+set(handles.statusEdit,'String','Converting FISH Data to Stack');drawnow;
+handles.FISHstack=zeros(FISHstack(1).height,FISHstack(1).width,length(FISHstack));
+for N=1:length(FISHstack)
+    handles.FISHstack(:,:,N)=double(FISHstack(N).data);
+    handles.FISHstack(:,:,N)=handles.FISHstack(:,:,N)/max(max(handles.FISHstack(:,:,N)));
+end
+handles.currentstack2=handles.FISHstack;
+
+handles.numim=size(handles.nucstack,3);
+set(handles.ImageSlider,'Max',handles.numim,'Min',1,'SliderStep',[1/handles.numim 5/handles.numim],'Value',1);
+set(handles.statusEdit,'String','');drawnow;
+set(handles.pathEdit,'String',nucpath);drawnow;
+
+set(handles.menu_Mline,'Enable','on');
+set(handles.toolbarMline,'Enable','on');
+guidata(hObject, handles);
+update_images(hObject,handles);
+
+
+
+
+% --------------------------------------------------------------------
+function menu_lsmOpen_Callback(hObject, eventdata, handles)
+path=get(handles.pathEdit,'String');
+set(handles.statusEdit,'String','Reading .lsm file');drawnow;
+[file,path]=uigetfile({'*.lsm'},'select .lsm file',path);
+lsmdata=tiffread(sprintf('%s/%s',path,file));
+
+
+
+handles.nucstack=zeros(lsmdata(1).height,lsmdata(1).width,length(lsmdata));
+handles.FISHstack=zeros(lsmdata(1).height,lsmdata(1).width,length(lsmdata));
+for N=1:length(lsmdata)
+    handles.nucstack(:,:,N)=double(lsmdata(N).data{1});
+    handles.nucstack(:,:,N)=handles.nucstack(:,:,N)/max(max(handles.nucstack(:,:,N)));
+    handles.FISHstack(:,:,N)=double(lsmdata(N).data{2});
+    handles.FISHstack(:,:,N)=handles.FISHstack(:,:,N)/max(max(handles.FISHstack(:,:,N)));
+end
+handles.currentstack1=handles.nucstack;
+handles.currentstack2=handles.FISHstack;
+
+%set the resolution values
+xy_res=lsmdata(1).lsm(1).VoxelSizeX*1000000;
+z_res=lsmdata(1).lsm(1).VoxelSizeZ*1000000;
+set(handles.xyresEdit,'String',xy_res);
+set(handles.zresEdit,'String',z_res);
+
+handles.numim=size(handles.nucstack,3);
+set(handles.ImageSlider,'Max',handles.numim,'Min',1,'SliderStep',[1/handles.numim 5/handles.numim],'Value',1);
+set(handles.statusEdit,'String','');drawnow;
+guidata(hObject, handles);
+update_images(hObject,handles);
+
+
+
+function statusEdit_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes during object creation, after setting all properties.
+function statusEdit_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+function update_images(hObject,handles)
+set(handles.statusEdit,'String','Updating Stacks');drawnow;
+Val=round(get(handles.ImageSlider,'Value'));
+switch get(handles.popupmenu3,'Value')
+    case 1
+        handles.overlap=handles.currentstack1.*handles.currentstack2;
+        axes(handles.axes3);
+        handles.hImg3=imagesc(handles.overlap(:,:,Val));colormap(gray);axis off;
+    case 2
+        handles.overlap=zeros(size(handles.currentstack1,1),...
+            size(handles.currentstack1,2),3);
+        tmp=double(handles.currentstack1(:,:,Val));        
+        handles.overlap(:,:,3)=tmp/max(max(tmp));
+        tmp=double(handles.currentstack2(:,:,Val));
+        handles.overlap(:,:,2)=tmp/max(max(tmp));
+        axes(handles.axes3);
+        handles.hImg3=imagesc(handles.overlap);colormap(gray);axis off;
+end
+        
+axes(handles.axes1);
+handles.hImg1=imagesc(handles.currentstack1(:,:,Val));colormap(gray);axis off;
+
+axes(handles.axes2);
+handles.hImg2=imagesc(handles.currentstack2(:,:,Val));colormap(gray);axis off;
+
+handles.XData=get(handles.hImg1,'XData');
+handles.YData=get(handles.hImg1,'YData');
+set(handles.statusEdit,'String','');drawnow;
+guidata(hObject, handles);
+
+
+% --- Executes on button press in stlExport.
+function stlExport_Callback(hObject, eventdata, handles)
+[file,path]=uiputfile('~/Desktop','Specify .stl base name');
+% set(handles.statusEdit,'String','Writing FISH .stl file');drawnow;
+ filetok=strtok(file,'.');
+% FISHfiltstack=normalize_stack(handles.FISHfiltstack);
+% FISHv = isosurface(FISHfiltstack, 0.99);
+% patch2stl(sprintf('%s%s_FISH.stl',path,filetok),FISHv);
+
+nucstack=normalize_stack(handles.nucstack);
+set(handles.statusEdit,'String','Writing Nucleus .stl file');drawnow;
+nucv = isosurface(nucstack, 0.99);
+patch2stl(sprintf('%s%s_nuc.stl',path,filetok),nucv);
+
+% posstack=normalize_stack(handles.posstack);
+% set(handles.statusEdit,'String','Writing Positive .stl file');drawnow;
+% posv = isosurface(posstack, 0.99);
+% patch2stl(sprintf('%s%s_pos.stl',path,filetok),posv);
+
+% hObject    handle to stlExport (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+function stack=normalize_stack(stack)
+for N=size(stack,3)
+    stack(:,:,N)=double(stack(:,:,N))/max(max(double(stack(:,:,N))));
+end
+
+
+% --------------------------------------------------------------------
+function menu_Export_Callback(hObject, eventdata, handles)
+
+
+% --------------------------------------------------------------------
+function menu_stlExport_Callback(hObject, eventdata, handles)
+dir=uigetdir('~/Desktop');
+set(handles.statusEdit,'String','generating nucleus isosurface'); 
+fv=isosurface(handles.nucopenstack,.99);
+set(handles.statusEdit,'String','writing .stl file'); 
+patch2stl(sprintf('%s/Nucleus.stl',dir),fv);
+
+set(handles.statusEdit,'String','generating FISH isosurface'); 
+fv=isosurface(handles.FISHopenstack,.99);
+set(handles.statusEdit,'String','writing .stl file'); 
+patch2stl(sprintf('%s/FISH.stl',dir),fv);
+set(handles.statusEdit,'String',''); 
+
+
+
+% --------------------------------------------------------------------
+function menu_imageExport_Callback(hObject, eventdata, handles)
+savepath=uigetdir;
+switch get(handles.popupmenu3,'Value')
+    case 1
+        for N=1:size(handles.threshstack,3)
+        set(handles.statusEdit,'String','Saving images');
+        imwrite(handles.currentstack1(:,:,N),sprintf('%s/Stack1_%g.jpg',savepath,N));
+        imwrite(handles.currentstack2(:,:,N),sprintf('%s/Stack2_%g.jpg',savepath,N));
+        imwrite(handles.overlap(:,:,N),sprintf('%s/Stack3_%g.jpg',savepath,N));
+        end
+    case 2
+        tmpim=zeros(size(handles.currentstack1,1),size(handles.currentstack1,2),3);
+        for N=1:size(handles.threshstack,3)
+        set(handles.statusEdit,'String','Saving images');
+        imwrite(handles.currentstack1(:,:,N),sprintf('%s/Stack1_%g.jpg',savepath,N));
+        imwrite(handles.currentstack2(:,:,N),sprintf('%s/Stack2_%g.jpg',savepath,N));
+        tmpim(:,:,3)=handles.currentstack1(:,:,N);
+        tmpim(:,:,2)=handles.currentstack2(:,:,N);
+        imwrite(tmpim,sprintf('%s/Stack3_%g.jpg',savepath,N));
+        end
+end
+set(handles.statusEdit,'String','');
+
+
+% --------------------------------------------------------------------
+function menu_workspaceExport_Callback(hObject, eventdata, handles)
+assignin('base','nucstack',handles.nucstack);
+assignin('base','FISHstack',handles.FISHstack);
+assignin('base','nucthreshstack',handles.threshstack);
+assignin('base','nucopenstack',handles.nucopenstack);
+assignin('base','posstack',handles.posstack);
+assignin('base','posstackbi',handles.posstackbi);
+assignin('base','L',handles.L);
+assignin('base','D',handles.D);
+assignin('base','X',handles.X);
+assignin('base','Y',handles.Y);
+assignin('base','Z',handles.Z);
+assignin('base','conX',handles.conX);
+assignin('base','conY',handles.conY);
+assignin('base','conZ',handles.conZ);
+assignin('base','conposlist',handles.conposlist);
+assignin('base','poslist',handles.poslist);
+
+
+
+
+% --- Executes on button press in OpenNucButton.
+function OpenNucButton_Callback(hObject, eventdata, handles)
+open_val=str2double(get(handles.NucOpenEdit,'String'));
+res=str2double(get(handles.xyresEdit,'String'));
+S_size=round(open_val/res);
+set(handles.statusEdit,'String','Opening Nucleus Stack');drawnow;
+handles.s=strel('disk',S_size);
+handles.nucopenstack=imopen(handles.threshstack,handles.s);
+handles.currentstack1=handles.nucopenstack;
+set(handles.statusEdit,'String','');drawnow;
+set(handles.OpenFISHButton,'Enable','on');
+if handles.flags(5)==0
+    add_to_listbox(handles,'Opened Nucleus Data');
+    handles.flags(5)=1;
+end
+set(handles.popupmenu1,'Value',5);
+guidata(hObject, handles);
+update_images(hObject,handles);
+
+
+
+% --- Executes on button press in FindPosNucButton.
+function FindPosNucButton_Callback(hObject, eventdata, handles)
+handles.posstack=handles.nucstack*0;
+handles.posval=str2double(get(handles.overlapEdit,'String'))/100;
+handles.poslist=[];
+for N=1:size(handles.nucstack,3)
+    tmpL=handles.L(:,:,N);
+    tmpO=handles.FISHdilatestack(:,:,N);
+    tmpP=handles.posstack(:,:,N);
+    set(handles.statusEdit,'String',...
+        sprintf('Finding Labeled Nuclei: slice %g of %g',N,...
+        size(handles.nucstack,3)));drawnow;
+    handles.poslist=horzcat(handles.poslist,0);
+    for M=2:max(tmpL(:))
+        found=find(tmpL==M);
+        %flag nucleus slices as positive if more than a user defined
+        %percentage of the nucleus is overlapping a region of FISH
+        %expression
+        if sum(tmpO(found))/length(found)>handles.posval
+            tmpP(found)=1;
+            handles.poslist=horzcat(handles.poslist,1);
+        else
+            handles.poslist=horzcat(handles.poslist,0);
+        end
+    end
+    handles.posstack(:,:,N)=tmpP;
+end
+set(handles.statusEdit,'String','Consolidating centroids');drawnow;
+handles.posstackbi=handles.posstack;
+handles.posstack=handles.posstack.*handles.nucstack;
+handles.links=find_links(handles);
+handles.currentstack2=handles.posstack;
+if handles.flags(9)==0
+    add_to_listbox(handles,'Positive Nucleus Data');
+    handles.flags(9)=1;
+    set(handles.toolbar3Dplot,'Enable','on');
+end
+set(handles.popupmenu2,'Value',9);
+guidata(hObject, handles);
+set(handles.statusEdit,'String','');
+update_images(hObject,handles);
+display_table(hObject,handles);
+
+
+% --- Executes on button press in FindNucButton.
+function FindNucButton_Callback(hObject, eventdata, handles)
+handles.L=handles.nucstack*0;
+D=handles.nucstack*0;
+handles.W=handles.nucstack*0;
+Lsize=size(handles.L,3);
+for N=1:Lsize
+    set(handles.statusEdit,'String',sprintf('Computing Distance Image: Slice %g of %g'...
+       ,N,Lsize));drawnow;
+    tmp=handles.nucopenstack(:,:,N);
+    D(:,:,N)=bwdist(~tmp);
+    D(:,:,N)=-D(:,:,N);
+    Dtmp=D(:,:,N);
+    Dtmp(~tmp)=-Inf;
+    D(:,:,N)=Dtmp;
+    set(handles.statusEdit,'String',sprintf('Computing Watershed Image: Slice %g of %g'...
+       ,N,Lsize));drawnow;
+    handles.W(:,:,N)=watershed(D(:,:,N));
+    set(handles.statusEdit,'String',sprintf('Labeling Nuclei: Slice %g of %g'...
+       ,N,Lsize));drawnow;
+    Ltmp=bwlabel(handles.W(:,:,N)>1);
+    axes(handles.axes1);imagesc(Ltmp);drawnow;
+    set(handles.statusEdit,'String',sprintf('Checking Nuclei: Slice %g of %g'...
+       ,N,Lsize));drawnow;
+    %Ltmp=nuc_check(handles,Ltmp,N);
+    %axes(handles.axes1);imagesc(Ltmp);drawnow;pause(1);
+    %Ltmp(~tmp)=1;
+    handles.L(:,:,N)=Ltmp;
+end
+handles.D=D;
+handles.X=[];
+handles.Y=[];
+handles.Z=[];
+[handles.X,handles.Y,handles.Z]=get_centroids(handles);
+
+set(handles.statusEdit,'String','');drawnow;
+
+handles.currentstack1=handles.L;
+set(handles.FindPosNucButton,'Enable','on');
+if handles.flags(8)==0
+    add_to_listbox(handles,'Segmented Nucleus Data');
+    handles.flags(8)=1;
+end
+set(handles.popupmenu1,'Value',8);
+guidata(hObject, handles);
+update_images(hObject,handles);
+
+
+function [X,Y,Z]=get_centroids(handles)
+L=handles.L;
+X=[];
+Y=[];
+Z=[];
+Lsize=size(L,3);
+for N=1:Lsize
+set(handles.statusEdit,'String',sprintf('Getting Centroids: slice %g of %g'...
+    ,N,Lsize));drawnow;    
+    props=regionprops(L(:,:,N));
+    for M=1:length(props)
+        tmp=props(M).Centroid;
+        X=horzcat(X,tmp(1));
+        Y=horzcat(Y,tmp(2));
+    end
+    Z=horzcat(Z,ones(1,length(props))*N);
+end
+
+set(handles.statusEdit,'String','');drawnow;
+
+function links=find_links(handles)
+links={};
+refs=1:length(handles.X);
+dist_thresh=get(handles.DistThreshEdit,'String');
+xyres=str2num(get(handles.xyresEdit,'String'));
+zres=str2num(get(handles.zresEdit,'String'));
+while numel(handles.X)>0
+        eudist=(sqrt(((handles.X-handles.X(1))*xyres).^2+...
+        ((handles.Y-handles.Y(1))*xyres).^2+...
+            ((handles.Z-handles.Z(1))*zres).^2));
+        [found,eudist]=pop(eudist,sprintf('<%s',num2str(dist_thresh)));
+            links=horzcat(links,refs(found));
+            refs(found)=[];
+            handles.X(found)=[];
+            handles.Y(found)=[];
+            handles.Z(found)=[];
+end
+set(handles.menu_CheckCenters,'Enable','on');
+
+function display_table(hObject,handles)
+handles.conX=[];
+handles.conY=[];
+handles.conZ=[];
+handles.conposlist=[];
+handles.Pos=[];
+xyres=str2num(get(handles.xyresEdit,'String'));
+zres=str2num(get(handles.zresEdit,'String'));
+for N=1:length(handles.links)
+    handles.conX=horzcat(handles.conX,mean(handles.X(handles.links{N}))...
+        *xyres);
+    handles.conY=horzcat(handles.conY,mean(handles.Y(handles.links{N}))...
+        *xyres);
+    handles.conZ=horzcat(handles.conZ,mean(handles.Z(handles.links{N}))...
+        *zres);
+    if sum(handles.poslist(handles.links{N}))>0;
+        handles.Pos=horzcat(handles.Pos,1);
+        handles.conposlist=horzcat(handles.conposlist,1);
+    else
+        handles.Pos=horzcat(handles.Pos,0);
+        handles.conposlist=horzcat(handles.conposlist,0);
+    end
+end
+
+guidata(hObject, handles);
+update_images(hObject,handles);
+
+f=figure('Position',[300 300 450 270]);
+cnames = {'X','Y','Z','Expression'}; 
+dat=horzcat(handles.conX',handles.conY',handles.conZ',handles.Pos');
+uitable('Data',dat,'ColumnName',cnames,... 
+            'Parent',f,'Position',[20 20 400 200]);
+        
+cnames={'# Found','# Postitive','%Positive'};
+dat=horzcat(length(handles.conX),sum(handles.Pos),...
+    sum(handles.Pos)/length(handles.conX)*100);
+uitable('Data',dat,'ColumnName',cnames,... 
+            'Parent',f,'Position',[20 220 265 40]);
+
+
+
+% --- Executes on button press in FISHThreshButton.
+function FISHThreshButton_Callback(hObject, eventdata, handles)
+set(handles.statusEdit,'String','Thresholding FISH Stack');drawnow;
+handles.thresh=str2num(get(handles.FISHThreshEdit,'String'));
+handles.FISHthreshstack=handles.FISHstack>handles.thresh;
+handles.currentstack2=handles.FISHthreshstack;
+set(handles.OpenNucButton,'Enable','on');
+if handles.flags(4)==0
+    add_to_listbox(handles,'Thresholded FISH Data');
+    handles.flags(4)=1;
+end
+set(handles.popupmenu2,'Value',4);
+guidata(hObject, handles);
+update_images(hObject,handles);
+set(handles.statusEdit,'String','');drawnow;
+
+
+
+function FISHThreshEdit_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes during object creation, after setting all properties.
+function FISHThreshEdit_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in OpenFISHButton.
+function OpenFISHButton_Callback(hObject, eventdata, handles)
+open_val=str2double(get(handles.FISHOpenEdit,'String'));
+res=str2double(get(handles.xyresEdit,'String'));
+S_size=round(open_val/res);
+set(handles.statusEdit,'String','Opening FISH Stack');drawnow;
+handles.s=strel('disk',S_size);
+handles.FISHopenstack=imopen(handles.FISHthreshstack,handles.s);
+handles.currentstack2=handles.FISHopenstack;
+set(handles.DilateFISHButton,'Enable','on');
+set(handles.statusEdit,'String','');drawnow;
+if handles.flags(6)==0
+    add_to_listbox(handles,'Opened FISH Data');
+    handles.flags(6)=1;
+end
+set(handles.popupmenu2,'Value',6);
+guidata(hObject, handles);
+update_images(hObject,handles);
+
+
+% --- Executes on button press in DilateFISHButton.
+function DilateFISHButton_Callback(hObject, eventdata, handles)
+dilate_val=str2double(get(handles.FISHDilateEdit,'String'));
+res=str2double(get(handles.xyresEdit,'String'));
+S_size=round(dilate_val/res);
+set(handles.statusEdit,'String','Dilating FISH Stack');drawnow;
+handles.s=strel('disk',S_size);
+handles.FISHdilatestack=imdilate(handles.FISHopenstack,handles.s);
+handles.currentstack2=handles.FISHdilatestack;
+set(handles.statusEdit,'String','');drawnow;
+set(handles.FindNucButton,'Enable','on');
+if handles.flags(7)==0
+    add_to_listbox(handles,'Dilated FISH Data');
+    handles.flags(7)=1;
+end
+set(handles.popupmenu2,'Value',7);
+guidata(hObject, handles);
+update_images(hObject,handles);
+
+
+
+function FISHDilateEdit_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function FISHDilateEdit_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function FISHOpenEdit_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes during object creation, after setting all properties.
+function FISHOpenEdit_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function DistThreshEdit_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function DistThreshEdit_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function xyresEdit_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes during object creation, after setting all properties.
+function xyresEdit_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function zresEdit_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes during object creation, after setting all properties.
+function zresEdit_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in popupmenu1.
+function popupmenu1_Callback(hObject, eventdata, handles)
+switch get(handles.popupmenu1,'Value')
+    case 1
+        handles.currentstack1=handles.nucstack;
+    case 2
+        handles.currentstack1=handles.FISHstack;
+    case 3
+        handles.currentstack1=handles.threshstack;
+    case 4
+        handles.currentstack1=handles.FISHthreshstack;
+    case 5
+        handles.currentstack1=handles.nucopenstack;
+    case 6
+        handles.currentstack1=handles.FISHopenstack;
+    case 7
+        handles.currentstack1=handles.FISHdilatestack;
+    case 8
+        handles.currentstack1=handles.W;
+    case 9
+        handles.currentstack1=handles.posstack;
+end
+guidata(hObject, handles);
+update_images(hObject,handles);
+
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu1_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in popupmenu2.
+function popupmenu2_Callback(hObject, eventdata, handles)
+switch get(handles.popupmenu2,'Value')
+    case 1
+        handles.currentstack2=handles.nucstack;
+    case 2
+        handles.currentstack2=handles.FISHstack;
+    case 3
+        handles.currentstack2=handles.threshstack;
+    case 4
+        handles.currentstack2=handles.FISHthreshstack;
+    case 5
+        handles.currentstack2=handles.nucopenstack;
+    case 6
+        handles.currentstack2=handles.FISHopenstack;
+    case 7
+        handles.currentstack2=handles.FISHdilatestack;
+    case 8
+        handles.currentstack2=handles.W;
+    case 9
+        handles.currentstack2=handles.posstack;
+end
+guidata(hObject, handles);
+
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu2_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in popupmenu3.
+function popupmenu3_Callback(hObject, eventdata, handles)
+guidata(hObject, handles);
+update_images(hObject,handles);
+
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu3_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+function add_to_listbox(handles,input_string)
+cell1=get(handles.popupmenu1,'String');
+cell1{end+1}=input_string;
+set(handles.popupmenu1,'String',cell1);
+cell2=get(handles.popupmenu2,'String');
+cell2{end+1}=input_string;
+set(handles.popupmenu2,'String',cell2);
+
+function out=nuc_check(handles,Ltmp,slice)
+flag=1;
+while flag==1
+    Ltmp=bwlabel(Ltmp>0);
+    nuc_stats=regionprops(Ltmp,'BoundingBox');
+    flag=0;
+    for N=1:length(nuc_stats)
+        x=round(nuc_stats(N).BoundingBox);
+        if x(3)>10 || x(4)>10
+            if x(3)/x(4)<=.9
+                disp(sprintf('low catch: spot #%g',N));
+                tmpim=handles.nucstack(x(2):x(2)+x(4),x(1):x(1)+x(3),slice);
+                %assignin('base','tmpim',tmpim);
+               %assignin('base','x',x);
+               %assigin('base','Ltmp',Ltmp);
+                %axes(handles.axes1);imagesc(tmpim);drawnow;
+                tmpline=sum(tmpim,2);
+                tmpmin=find(tmpline==min(tmpline(5:length(tmpline)-5)));
+                tmpim=Ltmp(x(2):x(2)+x(4),x(1):x(1)+x(3));
+                tmpim(tmpmin,:)=0;
+                Ltmp(x(2):x(2)+x(4),x(1):x(1)+x(3))=tmpim;
+                axes(handles.axes2);imagesc(Ltmp);drawnow;
+                flag=1;
+            end
+            if x(3)/x(4)>=1.11
+                disp(sprintf('high catch: spot #%g',N));
+                tmpim=handles.nucstack(x(2):x(2)+x(4),x(1):x(1)+x(3),slice);
+                %axes(handles.axes1);imagesc(tmpim);drawnow;
+                tmpline=sum(tmpim,1);
+                tmpmin=find(tmpline==min(tmpline(5:length(tmpline)-5)));
+                tmpim=Ltmp(x(2):x(2)+x(4),x(1):x(1)+x(3));
+                tmpim(:,tmpmin)=0;
+                Ltmp(x(2):x(2)+x(4),x(1):x(1)+x(3))=tmpim;
+                axes(handles.axes2);imagesc(Ltmp);drawnow;
+                flag=1;
+            end
+        end
+    end
+end
+out=bwlabel(Ltmp>0);
+
+
+% --------------------------------------------------------------------
+function menu_SaveSet_Callback(hObject, eventdata, handles)
+xyres=get(handles.xyresEdit,'String');
+zres=get(handles.zresEdit,'String');
+nucthresh=get(handles.NucThreshEdit,'String');
+FISHthresh=get(handles.FISHThreshEdit,'String');
+nucopen=get(handles.NucOpenEdit,'String');
+FISHopen=get(handles.FISHOpenEdit,'String');
+FISHdilate=get(handles.FISHDilateEdit,'String');
+overlap=get(handles.overlapEdit,'String');
+distthresh=get(handles.DistThreshEdit,'String');
+
+[file,path]=uiputfile('.mat','Save Preferences',...
+    sprintf('Embryo3DPref%s.mat',date));
+save(sprintf('%s%s',path,file),'xyres','zres','nucthresh'...
+    ,'FISHthresh','nucopen','FISHopen','FISHdilate'...
+    ,'overlap','distthresh');
+
+
+% --------------------------------------------------------------------
+function menu_LoadSet_Callback(hObject, eventdata, handles)
+[file,path]=uigetfile('.mat','Select Preferences File');
+load(sprintf('%s%s',path,file));
+set(handles.xyresEdit,'String',xyres);
+set(handles.zresEdit,'String',zres);
+set(handles.NucThreshEdit,'String',nucthresh);
+set(handles.FISHThreshEdit,'String',FISHthresh);
+set(handles.NucOpenEdit,'String',nucopen);
+set(handles.FISHOpenEdit,'String',FISHopen);
+set(handles.FISHDilateEdit,'String',FISHdilate);
+set(handles.overlapEdit,'String',overlap);
+set(handles.DistThreshEdit,'String',distthresh);
+
+
+
+% --------------------------------------------------------------------
+function menu_Tools_Callback(hObject, eventdata, handles)
+
+
+
+% --------------------------------------------------------------------
+function menu_Mline_Callback(hObject, eventdata, handles)
+% get the xy_resolution
+%update_images;
+xyres=str2num(get(handles.xyresEdit,'String'));
+
+% Convert XData and YData to microns using the xyres value.
+XDataInMicrons = handles.XData*xyres; 
+YDataInMicrons = handles.YData*xyres;
+
+
+% Set XData and YData of images to microns.    
+set(handles.hImg1,'XData',XDataInMicrons,'YData',YDataInMicrons);    
+set(handles.axes1,'XLim',XDataInMicrons,'YLim',YDataInMicrons);
+
+set(handles.hImg2,'XData',XDataInMicrons,'YData',YDataInMicrons);    
+set(handles.axes2,'XLim',XDataInMicrons,'YLim',YDataInMicrons);
+
+set(handles.hImg3,'XData',XDataInMicrons,'YData',YDataInMicrons);    
+set(handles.axes3,'XLim',XDataInMicrons,'YLim',YDataInMicrons);
+
+%place an instance of imdistline on axes1 
+axes(handles.axes1);imdistline;
+
+
+
+
+% --------------------------------------------------------------------
+function menu_CheckCenters_Callback(hObject, eventdata, handles)
+%max intensity projection of raw nucleus data
+xyres=str2num(get(handles.xyresEdit,'String'));
+zres=str2num(get(handles.zresEdit,'String'));
+maxProj=max(handles.nucstack,[],3);
+figure;imagesc(maxProj);colormap(gray);
+title('Max projection with nucleus centers');hold on;
+scatter(handles.conX/xyres,handles.conY/xyres);
+
+
+
+
+% --------------------------------------------------------------------
+function toolbarsavepref_ClickedCallback(hObject, eventdata, handles)
+xyres=get(handles.xyresEdit,'String');
+zres=get(handles.zresEdit,'String');
+nucthresh=get(handles.NucThreshEdit,'String');
+FISHthresh=get(handles.FISHThreshEdit,'String');
+nucopen=get(handles.NucOpenEdit,'String');
+FISHopen=get(handles.FISHOpenEdit,'String');
+FISHdilate=get(handles.FISHDilateEdit,'String');
+overlap=get(handles.overlapEdit,'String');
+distthresh=get(handles.DistThreshEdit,'String');
+
+[file,path]=uiputfile('.mat','Save Preferences',...
+    sprintf('Embryo3DPref%s.mat',date));
+save(sprintf('%s%s',path,file),'xyres','zres','nucthresh'...
+    ,'FISHthresh','nucopen','FISHopen','FISHdilate'...
+    ,'overlap','distthresh');
+
+
+
+% --------------------------------------------------------------------
+function toolbarloadpref_ClickedCallback(hObject, eventdata, handles)
+[file,path]=uigetfile('.mat','Select Preferences File');
+load(sprintf('%s%s',path,file));
+set(handles.xyresEdit,'String',xyres);
+set(handles.zresEdit,'String',zres);
+set(handles.NucThreshEdit,'String',nucthresh);
+set(handles.FISHThreshEdit,'String',FISHthresh);
+set(handles.NucOpenEdit,'String',nucopen);
+set(handles.FISHOpenEdit,'String',FISHopen);
+set(handles.FISHDilateEdit,'String',FISHdilate);
+set(handles.overlapEdit,'String',overlap);
+set(handles.DistThreshEdit,'String',distthresh);
+
+
+
+% --------------------------------------------------------------------
+function toolbar3Dplot_ClickedCallback(hObject, eventdata, handles)
+%split into pos and neg nuclei
+negx=[];
+negy=[];
+negz=[];
+posx=[];
+posy=[];
+posz=[];
+for N=1:length(handles.Pos)
+    if handles.Pos(N)==1
+        posx=horzcat(posx,handles.conX(N));
+        posy=horzcat(posy,handles.conY(N));
+        posz=horzcat(posz,handles.conZ(N));
+    else
+        negx=horzcat(negx,handles.conX(N));
+        negy=horzcat(negy,handles.conY(N));
+        negz=horzcat(negz,handles.conZ(N));
+    end
+end
+h=figure;
+set(h,'Color','k');
+set(h,'Units','Pixels');
+title('Nucleus Center Locations');
+scatter3(posx,posy,posz,100,'g','filled');hold on;
+scatter3(negx,negy,negz,100,'b','filled');hold on;
+axis off;axis equal;
+
+
+%use if Embryo3DViewer is installed as well.  Only available for mac%
+menu_textExport_Callback(hObject, eventdata, handles)
+!open ~/Desktop/Embryo3DViewer.app
+%use if Embryo3DViewer is installed as well.  Only available for mac%
+
+
+
+% --------------------------------------------------------------------
+function menu_textExport_Callback(hObject, eventdata, handles)
+negx=[];
+negy=[];
+negz=[];
+posx=[];
+posy=[];
+posz=[];
+for N=1:length(handles.Pos)
+    if handles.Pos(N)==1
+        posx=horzcat(posx,handles.conX(N));
+        posy=horzcat(posy,handles.conY(N));
+        posz=horzcat(posz,handles.conZ(N));
+    else
+        negx=horzcat(negx,handles.conX(N));
+        negy=horzcat(negy,handles.conY(N));
+        negz=horzcat(negz,handles.conZ(N));
+    end
+end
+posx=posx-mean(posx);
+posy=posy-mean(posy);
+posz=posz-mean(posz);
+negx=negx-mean(negx);
+negy=negy-mean(negy);
+negz=negz-mean(negz);
+f=fopen('~/Desktop/neg.txt','w');
+fprintf(f,'[');
+for ii=1:length(negx)-1
+    fprintf(f,sprintf('[%g,%g,%g]',negx(ii),negy(ii),negz(ii)));
+    fprintf(f,',');
+end
+fprintf(f,sprintf('[%g,%g,%g]]\n',negx(ii+1),negy(ii+1),negz(ii+1)));
+fclose(f);
+f=fopen('~/Desktop/pos.txt','w');
+fprintf(f,'[');
+for ii=1:length(posx)-1
+    fprintf(f,sprintf('[%g,%g,%g]',posx(ii),posy(ii),posz(ii)));
+    fprintf(f,',');
+end
+fprintf(f,sprintf('[%g,%g,%g]]\n',posx(ii+1),posy(ii+1),posz(ii+1)));
+fclose(f);
+    
+
+
+
+% --------------------------------------------------------------------
+function toolbarMline_ClickedCallback(hObject, eventdata, handles)
+menu_Mline_Callback(hObject, eventdata, handles)
+
+
+

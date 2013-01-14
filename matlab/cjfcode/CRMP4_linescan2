@@ -1,0 +1,70 @@
+function CRMP4_linescan2
+%%
+try
+    startpath=evalin('base','startpath;');
+    [file,dir]=uigetfile('*.*','select image to analyze',startpath);
+    assignin('base','startpath',dir);
+catch
+    [file,dir]=uigetfile('*.*','select image to analyze','~/Desktop');
+    assignin('base','startpath',dir);
+end
+im=imread([dir file]);
+if ndims(im)==3
+    im=mean(im,3);
+end
+subplot(1,1,1);imagesc(im);title('select background ROI');colormap(gray);
+bgmask=roipoly;
+bgmean=mean2(im(bgmask==1));
+confirm='No';
+while strcmp(confirm,'No')==1
+    subplot(1,1,1);imagesc(im);
+    title('Select Analysis Contour');
+    [cx,cy,c]=improfile;
+    line(cx,cy);
+    title('Select Length')
+    [cdist,dirflag]=drawbins(gca,cx,cy);
+    %subplot(1,2,1);imagesc(im);rectangle('Position',rect);
+    %subplot(1,2,2);plot(mean(tmp,2)/bgmean);
+    confirm=questdlg('Bin Position OK?');
+end
+
+
+
+function [cdist,dirflag]=drawbins(axis,cx,cy)
+cmid=round(length(cx)/2);
+ang=atan2(cy(cmid+2)-cy(cmid-2),cx(cmid+2)-cx(cmid-2));
+h=imdistline(axis,[cx(cmid),cx(cmid)+100*cos(ang-90)],[cy(cmid),cy(cmid)+100*sin(ang-90)]);
+hapi=iptgetapi(h);
+w=0;
+while w==0
+    w=waitforbuttonpress;
+end
+cdist=hapi.getDistance();
+cpos=hapi.getPosition();
+hapi.delete();
+dirflag=0;
+if cpos(1,1)<cpos(1,2)
+    for N=11:5:length(cx)-10
+        ang=atan2(cy(N+10)-cy(N-10),cx(N+10)-cx(N-10))/pi*180;
+        line([cx(N),cx(N)+cdist*cosd(ang-90)],[cy(N),cy(N)+cdist*sind(ang-90)]);
+        dirflag=1;
+    end
+else
+    for N=11:5:length(cx)-10
+        ang=atan2(cy(N+10)-cy(N-10),cx(N+10)-cx(N-10))/pi*180;
+        line([cx(N),cx(N)+cdist*cosd(ang+90)],[cy(N),cy(N)+cdist*sind(ang+90)]);
+    end
+end
+
+function get_binnned_data(im,cx,cy,dist,dirflag,binsize)
+if dirflag==0
+    for N=11:5:length(cx)-10
+        ang=atan2(cy(N+10)-cy(N-10),cx(N+10)-cx(N-10))/pi*180;
+        improfile(im,[cx(N),cx(N)+cdist*cosd(ang+90)],[cy(N),cy(N)+cdist*sind(ang+90)],round(dist));
+    end
+else
+    for N=11:5:length(cx)-10
+        ang=atan2(cy(N+10)-cy(N-10),cx(N+10)-cx(N-10))/pi*180;
+        improfile(im,[cx(N),cx(N)+cdist*cosd(ang-90)],[cy(N),cy(N)+cdist*sind(ang-90)],round(dist));
+    end
+end

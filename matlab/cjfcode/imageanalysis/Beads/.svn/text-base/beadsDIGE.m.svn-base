@@ -1,0 +1,133 @@
+function Beads=beadsDIGE
+%Import the Cy3 and Cy5 .dvi images to be analyzed
+[Cy3,Cy5,imdir]=getIms;
+combinedIm=Cy3.im+Cy5.im;
+Cy5.im=DIGEFermi(Cy5.im);
+Cy3.im=DIGEFermi(Cy3.im);
+disp('applying fermi filters');
+
+%get spot domains
+Beads=beads(combinedIm,0,0);
+
+%get significant spots
+spotStats=getSig(Beads,Cy3.im,Cy5.im,imdir,'SigSpots');
+
+%plot results
+doPlotting(Beads,imdir,spotStats);
+
+%export workspace to file
+save(sprintf('%s/BeadsAnalysis.mat',imdir));
+
+function [Cy3,Cy5,imdir]=getIms
+[file,imdir]=uigetfile({'*.dvi'},'Select The Cy3 Gel Image'...
+   ,pwd);
+Cy3.im=double(DVI_read(sprintf('%s%s',imdir,file)));
+Cy3.logim=log(Cy3.im);
+
+[file,imdir]=uigetfile({'*.dvi'},'Select The Cy5 Gel Image'...
+   ,imdir);
+Cy5.im=double(DVI_read(sprintf('%s%s',imdir,file)));
+Cy5.logim=log(Cy5.im);
+%display the Cy5 image and crop both images to an ROI for analysis
+figure;imagesc(Cy5.logim);colormap(gray);title('Select Processing ROI');
+[Cy5.logim,rect]=imcrop;
+Cy3.logim=imcrop(Cy3.logim,rect);
+Cy3.im=imcrop(Cy3.im,rect);
+Cy5.im=imcrop(Cy5.im,rect);
+imagesc(Cy5.logim);drawnow;
+
+function spotStats=getSig(Beads,Cy3im,Cy5im,imdir,figname)
+%check spot areas
+refs=1:length(Beads.spot_centerX);
+pixSums=[];
+for N=1:length(Beads.spot_centerX)
+    found=find(Beads.domainIm==N);
+    pixSums=horzcat(pixSums,length(found));
+end
+found=find(pixSums==0);
+Beads.spot_centerX(found)=[];
+Beads.spot_centerY(found)=[];
+refs(found)=[];
+
+%find significant spots
+ratios=[];
+for N=1:length(refs)
+    found=find(Beads.domainIm==refs(N));
+    ratios=horzcat(ratios,sum(Cy3im(found))/sum(Cy5im(found)));
+end
+%
+% %remove outliers
+% rMean=mean(ratios);
+% rStd=std(ratios,1);
+% outliers=[];
+% outliers=horzcat(outliers,find(ratios>(rMean+rStd*3)));
+% outliers=horzcat(outliers,find(ratios<(rMean-rStd*3)));
+% ratios(outliers)=[];
+% %remove outliers
+%find significant spots
+rMean=mean(ratios);
+rStd=std(ratios,1);
+posSig=find(ratios>(rMean+rStd*2));
+negSig=find(ratios<(rMean-rStd*2));
+hold on;
+title('Significant Spots: R=Cy5, G=Cy3');
+scatter(Beads.spot_centerY(posSig),Beads.spot_centerX(posSig),'g');
+scatter(Beads.spot_centerY(negSig),Beads.spot_centerX(negSig),'r');
+figure_save(gcf,imdir,figname);
+
+spotStats.rMean=rMean;
+spotStats.rStd=rStd;
+spotStats.posSig=posSig;
+spotStats.negSig=negSig;
+spotStats.refs=refs;
+spotStats.ratios=ratios;
+
+function doPlotting(Beads,imdir,spotStats)
+%display overlapping spot domains on the Cy5 image
+RGB=zeros(size(Beads.logim,1),size(Beads.logim,2),3);
+RGB(:,:,1)=Beads.logimNorm;
+RGB(:,:,2)=Beads.logimNorm;
+RGB(:,:,3)=Beads.logimNorm;
+B=RGB(:,:,3);
+B(find(Beads.perimIm>0))=1;
+RGB(:,:,3)=B;
+figure;imagesc(RGB);title(sprintf('found %g spots',...
+    length(Beads.spot_centerY)));hold on;
+scatter(Beads.spot_centerY(spotStats.refs),Beads.spot_centerX(spotStats.refs),'.b');
+figure_save(gcf,imdir,'Found Spots');
+figure;imagesc(Beads.probIm);colormap(gray);title('Gel Model');
+figure_save(gcf,imdir,'Gel Model');
+
+R=RGB(:,:,1)*0;
+G=R;
+ratiosMeanNorm=spotStats.ratios-spotStats.rMean;
+reds=ratiosMeanNorm;
+reds(reds>0)=0;
+rNorm=abs(reds)/max(abs(reds));
+greens=ratiosMeanNorm;
+greens(greens<0)=0;
+gNorm=greens/max(greens);
+% 
+for N=1:length(spotStats.refs)
+    found=find(Beads.domainIm==spotStats.refs(N));
+    R(found)=(1-gNorm(N));
+    G(found)=(1-rNorm(N));
+end
+imagesc(RGB);title('Expression ratio: R=Cy5, G=Cy3');hold on;
+C=zeros(length(gNorm),3);
+C(:,1)=1-gNorm;
+C(:,2)=1-rNorm;
+scatter(Beads.spot_centerY(spotStats.refs),Beads.spot_centerX(spotStats.refs)...
+    ,50,C,'filled');
+figure_save(gcf,imdir,'Expression_spots');
+RGB(:,:,1)=R;
+RGB(:,:,2)=G;
+RGB(:,:,3)=G*0;
+figure;imagesc(RGB);title('Expression ratio: R=Cy5, G=Cy3');hold on;
+figure_save(gcf,imdir,'Expression_filled');
+
+
+function figure_save(fig,fdir,fname)
+figure(fig);
+pstr=sprintf('%s/%s.jpg',fdir,fname);
+print(gcf,'-djpeg',pstr);

@@ -1,0 +1,8 @@
+dir=uigetdir;
+data=zeros(1024,1024,4);
+for N=1:10
+    data(:,:,1)=data(:,:,1)+cp_read2(sprintf('%s/Image%g.cpp',dir,36*N));
+    data(:,:,2)=data(:,:,2)+cp_read2(sprintf('%s/Image%g.cpp',dir,36*N+9));
+    data(:,:,3)=data(:,:,3)+cp_read2(sprintf('%s/Image%g.cpp',dir,36*N+18));
+    data(:,:,4)=data(:,:,4)+cp_read2(sprintf('%s/Image%g.cpp',dir,36*N+27));
+end

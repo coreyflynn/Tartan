@@ -1,0 +1,1 @@
+function result = tps_rbf(r)ww = find(r == 0);result = (r.^2).*log(r.^2);result(ww) = 0;

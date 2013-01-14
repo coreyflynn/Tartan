@@ -1,0 +1,6 @@
+function tubule_scholl(stack,radius)
+new_radius=radius_dilate(center,slice,radius);
+
+function new_radius=radius_dilate(center,slice,radius)
+z_component=abs(center.z-slice);
+new_radius=sqrt(radius^2+z_component^2);

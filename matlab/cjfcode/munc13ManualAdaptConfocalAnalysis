@@ -1,0 +1,12 @@
+function munc13ManualAdaptConfocalAnalysis(path,stack_size)
+
+
+
+end
+
+function NewPosCallback(pos)
+im.data=evalin('base','imb');
+figure(10);imagesc(im.data(round(pos(2)-20):round(pos(2)+20),round(pos(1)-20):round(pos(1)+20)));
+end
+
+    
